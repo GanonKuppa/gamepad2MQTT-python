@@ -6,11 +6,13 @@ from evdev import InputDevice, categorize, ecodes, KeyEvent
 import inspect
 import time
 import sys
+import os
 
 def main():
     recieve_time = 0
     # パラメータをファイルから読み込み
-    f = open("MQTT_param.json","r")
+    script_dir = os.path.abspath(os.path.dirname(__file__))
+    f = open(script_dir + "/MQTT_param.json","r")
     param = json.load(f)
 
     host = param["MQTT_IP"]
@@ -50,7 +52,7 @@ def main():
         now = time.time()
         event = gamepad.read_one()
 
-        if now - recieve_time > 5.0:
+        if now - recieve_time > 2.0:
             print("gamepad no input")
             client.publish("TEST", "gamepad no input")
             client.disconnect()
